@@ -1,0 +1,49 @@
+{% load static %}
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+
+            <!-- LOGO (FIXED ICON) -->
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-utensils text-orange-500 text-3xl"></i>
+                <span class="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                    PahiloKhana
+                </span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/" class="text-orange-500 font-semibold hover:text-orange-600">
+                    <i class="fa-solid fa-home mr-2"></i>Home
+                </a>
+                <a href="#" class="text-gray-700 hover:text-orange-500">
+                    <i class="fa-solid fa-th-large mr-2"></i>Categories
+                </a>
+                <a href="#" class="text-gray-700 hover:text-orange-500">
+                    <i class="fa-solid fa-info-circle mr-2"></i>About
+                </a>
+                <a href="#" class="text-gray-700 hover:text-orange-500">
+                    <i class="fa-solid fa-envelope mr-2"></i>Contact
+                </a>
+                <a href="#" class="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600">
+                    <i class="fa-solid fa-user mr-2"></i>Sign In
+                </a>
+            </div>
+
+            <!-- Mobile Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-700">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden pb-4">
+            <a href="/" class="block py-2 text-orange-500 font-semibold">Home</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-orange-500">Categories</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-orange-500">About</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-orange-500">Contact</a>
+        </div>
+    </div>
+</nav>
