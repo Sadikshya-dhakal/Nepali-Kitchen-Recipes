@@ -17,6 +17,7 @@ class Category(TimeStampModel):
    
     name = models.CharField(max_length=100)
     icon = models.CharField(max_length=100, null=True, blank=True, help_text="Emoji")
+    image = models.ImageField(upload_to="category_images/%Y/%m/%d", null=True, blank=True) 
     description = models.TextField(null=True, blank=True)
     recipe_count = models.IntegerField(default=0, help_text="Number of recipes in this category")
     

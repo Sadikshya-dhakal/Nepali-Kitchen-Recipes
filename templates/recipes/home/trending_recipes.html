@@ -1,0 +1,42 @@
+<!-- Trending Recipes -->
+<section class="py-16">
+    <div class="flex justify-between items-center mb-10">
+        <h2 class="text-4xl font-bold text-gray-800 flex items-center gap-3">
+            <i class="fas fa-fire text-orange-500"></i>
+            Trending Now
+        </h2>
+        <a href="#" class="text-orange-500 font-semibold hover:text-orange-600 flex items-center gap-2">
+            View All <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        {% for recipe in trending_recipes %}
+        <!-- Recipe Card -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-2">
+            <img src="{{ recipe.featured_image.url }}" alt="{{ recipe.title }}" class="w-full h-48 object-cover">
+            <div class="p-5">
+                <span class="inline-block bg-orange-100 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full mb-2">
+                    {{ recipe.category.name }}
+                </span>
+                <h3 class="font-bold text-lg mb-2">{{ recipe.title }}</h3>
+                <div class="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                    <span><i class="far fa-clock mr-1"></i>{{ recipe.total_time }} min</span>
+                    <span><i class="fas fa-signal mr-1"></i>{{ recipe.get_difficulty_display }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3 text-sm text-gray-600">
+                        <span><i class="far fa-eye mr-1"></i>{{ recipe.views_count }}</span>
+                        <span><i class="far fa-heart mr-1"></i>{{ recipe.likes_count }}</span>
+                    </div>
+                    <a href="#" class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-orange-600 transition">
+                        View Recipe
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+</section>

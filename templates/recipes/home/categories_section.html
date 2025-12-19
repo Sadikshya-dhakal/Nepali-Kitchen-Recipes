@@ -1,0 +1,23 @@
+<!-- Categories Section -->
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="flex justify-between items-center mb-10">
+        <h2 class="text-4xl font-bold text-gray-800">Explore Nepal's Culinary Heritage</h2>
+        <a href="#" class="text-orange-500 font-semibold hover:text-orange-600 flex items-center gap-2">
+            View All <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        
+        {% for category in categories %}
+        <!-- Category Card -->
+        <a href="#" class="group">
+            <div class="bg-gradient-to-br from-{{ category.gradient_from }} to-{{ category.gradient_to }} rounded-2xl p-6 text-white cursor-pointer transform hover:scale-105 transition shadow-lg h-full flex flex-col">
+                <div class="text-5xl mb-3">{{ category.icon }}</div>
+                <h3 class="font-bold text-lg mb-1">{{ category.name }}</h3>
+                <p class="text-sm opacity-90">{{ category.recipe_count }} recipes</p>
+            </div>
+        </a>
+        {% endfor %}
+        
+    </div>
+</section>
