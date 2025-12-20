@@ -19,6 +19,6 @@ class HomeView(TemplateView):
             published_at__isnull=False, 
             status="active", 
             is_trending=True
-        ).order_by("-published_at")[:4]
+        ).order_by("-published_at")[:6]
         
         return context
