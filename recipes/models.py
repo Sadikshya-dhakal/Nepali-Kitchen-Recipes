@@ -1,10 +1,7 @@
 from django.db import models
 
 
-# Create your models here.
-
 class TimeStampModel(models.Model):
-    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -12,20 +9,14 @@ class TimeStampModel(models.Model):
         abstract = True
 
 
-
 class Category(TimeStampModel):
-   
     name = models.CharField(max_length=100)
     icon = models.CharField(max_length=100, null=True, blank=True, help_text="Emoji")
     image = models.ImageField(upload_to="category_images/%Y/%m/%d", null=True, blank=True) 
     description = models.TextField(null=True, blank=True)
     recipe_count = models.IntegerField(default=0, help_text="Number of recipes in this category")
-    
-    # For gradient colors in category cards (Tailwind CSS classes)
     gradient_from = models.CharField(max_length=50, default="blue-500", help_text="Tailwind color")
     gradient_to = models.CharField(max_length=50, default="purple-500", help_text="Tailwind color")
-    
-    # Display order
     order = models.IntegerField(default=0, help_text="Display order on home page")
     
     def __str__(self):
@@ -37,20 +28,12 @@ class Category(TimeStampModel):
         verbose_name_plural = "categories"
 
 
-
 class Recipe(TimeStampModel):
-    """
-    Main Recipe Model
-    Displays in "Trending Now" section on home page
-    """
-    
-    # Status choices
     STATUS_CHOICES = [
         ("active", "Active"),
         ("inactive", "Inactive"),
     ]
     
-    # Difficulty choices
     DIFFICULTY_CHOICES = [
         ("easy", "Easy"),
         ("medium", "Medium"),
@@ -59,33 +42,41 @@ class Recipe(TimeStampModel):
     
     # Basic information
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True, help_text="Brief description for recipe cards")
-    content = models.TextField(blank=True, help_text="Detailed recipe content")
+    description = models.TextField(blank=True, help_text="Brief description")
+    content = models.TextField(blank=True, help_text="Detailed content")
     featured_image = models.ImageField(upload_to="recipes/%Y/%m/%d", blank=False)
     
-    # Author
+    # Author and status
     author = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="recipes")
-    
-    # Status
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="active")
     
-    # Engagement metrics
+    # Metrics
     views_count = models.PositiveBigIntegerField(default=0)
     likes_count = models.PositiveBigIntegerField(default=0)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    review_count = models.PositiveIntegerField(default=0)
     
-    # Recipe-specific fields
+    # Recipe details
     prep_time = models.IntegerField(help_text="Preparation time in minutes")
     cook_time = models.IntegerField(help_text="Cooking time in minutes")
-    servings = models.IntegerField(default=4, help_text="Number of servings")
+    servings = models.IntegerField(default=4)
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default="medium")
     
-    # Featured flags
-    is_trending = models.BooleanField(default=False, help_text="Show in trending section on home page")
+    # Recipe content
+    ingredients = models.TextField(help_text="One ingredient per line")
+    instructions = models.TextField(help_text="One step per line")
+    chef_tips = models.TextField(blank=True, null=True, help_text="One tip per line")
+    
+
+    
+    # Flags
+    is_trending = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     
     # Publishing
     published_at = models.DateTimeField(null=True, blank=True)
     
-    # Relationships
+    # Relationship
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="recipes")
     
     def __str__(self):
@@ -96,12 +87,43 @@ class Recipe(TimeStampModel):
     
     @property
     def total_time(self):
-        """Calculate total cooking time"""
         return self.prep_time + self.cook_time
+    
+    @property
+    def ingredients_list(self):
+        if self.ingredients:
+            return [i.strip() for i in self.ingredients.split('\n') if i.strip()]
+        return []
+    
+    @property
+    def instructions_list(self):
+        if self.instructions:
+            return [i.strip() for i in self.instructions.split('\n') if i.strip()]
+        return []
+    
+    @property
+    def tips_list(self):
+        if self.chef_tips:
+            return [t.strip() for t in self.chef_tips.split('\n') if t.strip()]
+        return []
+
+
+class Review(TimeStampModel):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="reviews")
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=100)
+    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
+    comment = models.TextField()
+    is_approved = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return f"{self.name} - {self.recipe.title}"
+    
+    class Meta:
+        ordering = ["-created_at"]
 
 
 class Newsletter(TimeStampModel):
-    """Newsletter subscriptions from home page"""
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     
@@ -110,4 +132,3 @@ class Newsletter(TimeStampModel):
     
     class Meta:
         ordering = ["-created_at"]
-

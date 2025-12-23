@@ -53,7 +53,7 @@ class CategoryDetailView(ListView):
 
 class RecipeDetailView(DetailView):
     model = Recipe
-    template_name = "recipes/detail.html"
+    template_name = "recipes/category/detail/recipe_detail.html"
     context_object_name = "recipe"
     
     def get_queryset(self):
