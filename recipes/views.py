@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from django.db.models import Q
+from django.db.models import Count, Q 
 from .models import Recipe, Category
 
 
@@ -36,7 +36,7 @@ class CategoryDetailView(ListView):
     model = Recipe
     template_name = "recipes/category/category.html"
     context_object_name = "recipes"
-    paginate_by = 5
+    paginate_by = 1
     
     def get_queryset(self):
         return Recipe.objects.filter(
@@ -48,6 +48,13 @@ class CategoryDetailView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = Category.objects.get(pk=self.kwargs.get('pk'))
+        
+        # Add related categories (exclude current category)
+        context['related_categories'] = Category.objects.exclude(
+            pk=self.kwargs.get('pk')
+        ).annotate(
+            total_recipes=Count('recipes', filter=Q(recipes__status='active'))
+        )[:6]
         return context
 
 
