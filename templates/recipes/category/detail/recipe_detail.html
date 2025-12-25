@@ -11,7 +11,8 @@
             <i class="fas fa-chevron-right text-xs"></i>
             <a href="{% url 'all-categories' %}" class="hover:text-orange-500 transition">Categories</a>
             <i class="fas fa-chevron-right text-xs"></i>
-            <a href="{% url 'category-detail' recipe.category.pk %}" class="hover:text-orange-500 transition">{{ recipe.category.name }}</a>
+            <a href="{% url 'category-detail' recipe.category.pk %}" class="hover:text-orange-500 transition">{{
+                recipe.category.name }}</a>
             <i class="fas fa-chevron-right text-xs"></i>
             <span class="text-orange-600 font-semibold">{{ recipe.title }}</span>
         </div>
@@ -23,11 +24,9 @@
     <div class="grid md:grid-cols-2 gap-8">
         <!-- Recipe Image -->
         <div>
-            {% if recipe.featured_image %}
-                <img src="{{ recipe.featured_image.url }}" alt="{{ recipe.title }}" class="w-full h-96 object-cover rounded-3xl shadow-2xl">
-            {% else %}
-                <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&q=80" alt="Recipe" class="w-full h-96 object-cover rounded-3xl shadow-2xl">
-            {% endif %}
+            <img src="{{ recipe.featured_image.url|default:'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&q=80' }}"
+                alt="{{ recipe.title }}" class="w-full h-96 object-cover rounded-3xl shadow-2xl">
+
         </div>
 
         <!-- Recipe Info -->
@@ -51,11 +50,13 @@
             <div class="flex items-center gap-6 mb-6">
                 <div class="flex items-center gap-2">
                     <div class="flex gap-1">
-                        {% if recipe.rating >= 1 %}<i class="fas fa-star text-yellow-400"></i>{% else %}<i class="far fa-star text-gray-300"></i>{% endif %}
-                        {% if recipe.rating >= 2 %}<i class="fas fa-star text-yellow-400"></i>{% else %}<i class="far fa-star text-gray-300"></i>{% endif %}
-                        {% if recipe.rating >= 3 %}<i class="fas fa-star text-yellow-400"></i>{% else %}<i class="far fa-star text-gray-300"></i>{% endif %}
-                        {% if recipe.rating >= 4 %}<i class="fas fa-star text-yellow-400"></i>{% else %}<i class="far fa-star text-gray-300"></i>{% endif %}
-                        {% if recipe.rating >= 5 %}<i class="fas fa-star text-yellow-400"></i>{% else %}<i class="far fa-star text-gray-300"></i>{% endif %}
+                        {% for star in stars %}
+                        {% if recipe.rating|default:0 > forloop.counter0 %}
+                        <i class="fas fa-star text-yellow-400"></i>
+                        {% else %}
+                        <i class="far fa-star text-gray-300"></i>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                     <span class="font-bold text-gray-800">{{ recipe.rating }}</span>
                     <span class="text-gray-600">({{ recipe.review_count }} reviews)</span>
@@ -88,15 +89,18 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-wrap gap-4">
-                <button class="flex-1 bg-orange-500 text-white px-6 py-3 rounded-full font-bold hover:bg-orange-600 transition flex items-center justify-center gap-2">
+                <button
+                    class="flex-1 bg-orange-500 text-white px-6 py-3 rounded-full font-bold hover:bg-orange-600 transition flex items-center justify-center gap-2">
                     <i class="far fa-heart"></i>
                     Save Recipe
                 </button>
-                <button class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-300 transition flex items-center gap-2">
+                <button
+                    class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-300 transition flex items-center gap-2">
                     <i class="fas fa-print"></i>
                     Print
                 </button>
-                <button class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-300 transition flex items-center gap-2">
+                <button
+                    class="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-300 transition flex items-center gap-2">
                     <i class="fas fa-share-alt"></i>
                     Share
                 </button>
@@ -135,12 +139,12 @@
                 <!-- Ingredients List -->
                 <ul class="space-y-3">
                     {% for ingredient in recipe.ingredients_list %}
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-check-circle text-orange-500 mt-1"></i>
-                            <span class="text-gray-700">{{ ingredient }}</span>
-                        </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-orange-500 mt-1"></i>
+                        <span class="text-gray-700">{{ ingredient }}</span>
+                    </li>
                     {% empty %}
-                        <li class="text-gray-500">No ingredients listed yet.</li>
+                    <li class="text-gray-500">No ingredients listed yet.</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -157,37 +161,38 @@
                 <!-- Step by Step Instructions -->
                 <div class="space-y-6">
                     {% for instruction in recipe.instructions_list %}
-                        <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 text-white rounded-full flex items-center justify-center font-bold">
-                                {{ forloop.counter }}
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-gray-700 leading-relaxed">
-                                    {{ instruction }}
-                                </p>
-                            </div>
+                    <div class="flex gap-4">
+                        <div
+                            class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 text-white rounded-full flex items-center justify-center font-bold">
+                            {{ forloop.counter }}
                         </div>
+                        <div class="flex-1">
+                            <p class="text-gray-700 leading-relaxed">
+                                {{ instruction }}
+                            </p>
+                        </div>
+                    </div>
                     {% empty %}
-                        <p class="text-gray-500">No instructions provided yet.</p>
+                    <p class="text-gray-500">No instructions provided yet.</p>
                     {% endfor %}
                 </div>
 
                 <!-- Chef's Tips -->
                 {% if recipe.tips_list %}
-                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 mt-8">
-                        <h3 class="font-bold text-lg text-gray-800 mb-3 flex items-center gap-2">
-                            <i class="fas fa-lightbulb text-yellow-500"></i>
-                            Chef's Tips
-                        </h3>
-                        <ul class="space-y-2 text-gray-700">
-                            {% for tip in recipe.tips_list %}
-                                <li class="flex gap-2">
-                                    <span class="text-orange-500">•</span>
-                                    <span>{{ tip }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 mt-8">
+                    <h3 class="font-bold text-lg text-gray-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-yellow-500"></i>
+                        Chef's Tips
+                    </h3>
+                    <ul class="space-y-2 text-gray-700">
+                        {% for tip in recipe.tips_list %}
+                        <li class="flex gap-2">
+                            <span class="text-orange-500">•</span>
+                            <span>{{ tip }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -200,23 +205,23 @@
     <h2 class="text-3xl font-bold text-gray-800 mb-8">You May Also Like</h2>
     <div class="grid md:grid-cols-4 gap-6">
         {% for related in related_recipes %}
-            <a href="{% url 'recipe-detail' related.pk %}" class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-2">
-                {% if related.featured_image %}
-                    <img src="{{ related.featured_image.url }}" alt="{{ related.title }}" class="w-full h-40 object-cover">
-                {% else %}
-                    <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80" alt="Recipe" class="w-full h-40 object-cover">
-                {% endif %}
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 mb-2">{{ related.title }}</h3>
-                    <div class="flex items-center gap-3 text-sm text-gray-600">
-                        <span><i class="far fa-clock mr-1"></i>{{ related.total_time }} min</span>
-                        <span><i class="fas fa-star text-yellow-400 mr-1"></i>{{ related.rating }}</span>
-                    </div>
+        <a href="{% url 'recipe-detail' related.pk %}"
+            class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-2">
+            {% if related.featured_image %}
+            <img src="{{ related.featured_image.url }}" alt="{{ related.title }}" class="w-full h-40 object-cover">
+            {% endif %}
+            <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-2">{{ related.title }}</h3>
+                <div class="flex items-center gap-3 text-sm text-gray-600">
+                    <span><i class="far fa-clock mr-1"></i>{{ related.total_time }} min</span>
+                    <span><i class="fas fa-star text-yellow-400 mr-1"></i>{{ related.rating }}</span>
                 </div>
-            </a>
+            </div>
+        </a>
         {% endfor %}
     </div>
 </section>
 {% endif %}
+
 
 {% endblock content %}

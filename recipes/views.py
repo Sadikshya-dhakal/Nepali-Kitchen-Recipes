@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from django.db.models import Count, Q 
+from django.db.models import Count, Q, Avg
 from .models import Recipe, Category
 
 
@@ -71,6 +71,7 @@ class RecipeDetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["stars"] = range(5)
         
         # Increment views
         current_recipe = self.object
