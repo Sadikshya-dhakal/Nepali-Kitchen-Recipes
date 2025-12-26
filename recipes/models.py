@@ -132,3 +132,39 @@ class Newsletter(TimeStampModel):
     
     class Meta:
         ordering = ["-created_at"]
+
+class AboutPage(TimeStampModel):
+    mission_description = models.TextField()
+    story_description = models.TextField()
+    
+    def __str__(self):
+        return "About Page"
+
+
+class CoreValue(TimeStampModel):
+    title = models.CharField(max_length=100)
+    icon = models.CharField(max_length=50)
+    description = models.TextField()
+    order = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.title
+
+
+class OurTeam(TimeStampModel):
+    name = models.CharField(max_length=100)
+    position = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="team_images/%Y/%m/%d")
+    description = models.TextField()
+    linkedin_url = models.URLField(blank=True, null=True)
+    twitter_url = models.URLField(blank=True, null=True)
+    order = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name

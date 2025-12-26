@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Count, Q, Avg
-from .models import Recipe, Category
+from .models import Newsletter, Recipe, Category, AboutPage, CoreValue, OurTeam, Review
 
 
 class HomeView(TemplateView):
@@ -88,5 +88,29 @@ class RecipeDetailView(DetailView):
             .exclude(id=self.object.id)
             .order_by("-published_at")[:3]
         )
+        
+        return context
+    
+class AboutView(TemplateView):
+    template_name = "recipes/about.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Get about page content
+        context['about_page'] = AboutPage.objects.first()
+        
+        # Get core values
+        context['core_values'] = CoreValue.objects.all()
+        
+        
+        # Get team members
+        context['team_members'] = OurTeam.objects.all()
+
+         # Calculate dynamic statistics (auto-updating)
+        context['active_users_count'] = Newsletter.objects.filter(is_active=True).count()
+        context['total_recipes_count'] = Recipe.objects.filter(status='active').count()
+        context['total_reviews_count'] = Review.objects.filter(is_approved=True).count()
+        context['total_categories_count'] = Category.objects.count()
         
         return context
