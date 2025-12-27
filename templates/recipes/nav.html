@@ -41,8 +41,8 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden pb-4">
             <a href="/" class="block py-2 text-orange-500 font-semibold">Home</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-orange-500">Categories</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-orange-500">About</a>
+            <a href="{% url 'all-categories' %}" class="block py-2 text-gray-700 hover:text-orange-500">Categories</a>
+            <a href="{% url 'about' %}" class="block py-2 text-gray-700 hover:text-orange-500">About</a>
             <a href="#" class="block py-2 text-gray-700 hover:text-orange-500">Contact</a>
         </div>
     </div>
