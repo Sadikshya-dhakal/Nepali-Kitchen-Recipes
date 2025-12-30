@@ -1,7 +1,12 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, DetailView
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, Q, Avg
-from .models import Newsletter, Recipe, Category, AboutPage, CoreValue, OurTeam, Review
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, TemplateView, ListView, DetailView
+
+from recipes.forms import ContactForm
+from .models import Contact, Newsletter, Recipe, Category, AboutPage, CoreValue, OurTeam, Review
 
 
 class HomeView(TemplateView):
@@ -114,3 +119,17 @@ class AboutView(TemplateView):
         context['total_categories_count'] = Category.objects.count()
         
         return context
+
+class ContactCreateView(SuccessMessageMixin, CreateView):
+    model = Contact
+    template_name = "recipes/contact.html"
+    form_class = ContactForm
+    success_url = reverse_lazy("contact")
+    success_message = "Your message has been sent successfully!"
+    
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "There was an error sending your message. Please check the form.",
+        )
+        return super().form_invalid(form)
