@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'recipes',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,5 @@ MESSAGE_TAGS = {
     message.WARNING: 'warning',
     message.ERROR: 'danger',
 }
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

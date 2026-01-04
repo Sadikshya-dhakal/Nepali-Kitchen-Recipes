@@ -61,6 +61,15 @@ class CategoryDetailView(ListView):
             total_recipes=Count('recipes', filter=Q(recipes__status='active'))
         )[:6]
         return context
+    
+class AllRecipesView(ListView):
+    model = Recipe
+    template_name = 'recipes/category/detail/all_recipes.html'
+    context_object_name = 'recipes'
+    paginate_by = 4
+    
+    def get_queryset(self):
+        return Recipe.objects.all().order_by('-created_at')  
 
 
 class RecipeDetailView(DetailView):

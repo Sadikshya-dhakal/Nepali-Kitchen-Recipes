@@ -1,0 +1,86 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <h2 class="text-4xl font-bold text-gray-800 mb-8">All Recipes</h2>
+
+    <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {% for recipe in recipes %}
+        <a href="{% url 'recipe-detail' pk=recipe.pk %}" class="group">
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-2">
+
+                <!-- IMAGE ONLY (NO TEXT OVERLAY) -->
+                <div class="h-64 overflow-hidden">
+                    {% if recipe.featured_image %}
+                    <img src="{{ recipe.featured_image.url }}"
+                         alt="{{ recipe.title }}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                        <i class="fas fa-utensils text-white text-5xl"></i>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- CONTENT BELOW IMAGE -->
+                <div class="p-6">
+                    <span class="text-xs text-orange-600 font-semibold uppercase">
+                        {{ recipe.category.name }}
+                    </span>
+
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 mt-1">
+                        {{ recipe.title }}
+                    </h3>
+
+                    <div class="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                        <span><i class="far fa-clock mr-1"></i>{{ recipe.total_time }} min</span>
+                        <span><i class="fas fa-signal mr-1"></i>{{ recipe.get_difficulty_display }}</span>
+                    </div>
+
+                    <p class="text-gray-600 text-sm">
+                        {{ recipe.description|truncatewords:15 }}
+                    </p>
+                </div>
+
+            </div>
+        </a>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+            <p class="text-xl text-gray-500">No recipes found.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="flex justify-center items-center gap-2 mt-12">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+            Previous
+        </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <span class="px-4 py-2 bg-orange-500 text-white rounded-lg">
+            {{ num }}
+        </span>
+        {% else %}
+        <a href="?page={{ num }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+            {{ num }}
+        </a>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+            Next
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock content %}
