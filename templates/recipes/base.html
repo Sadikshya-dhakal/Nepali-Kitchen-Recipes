@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +12,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Font Awesome 6 (REQUIRED) -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
+
 <body class="bg-gray-50">
 
     {% include 'recipes/nav.html' %}
@@ -33,6 +32,42 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
     </script>
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+
+    <script>
+        $("#newsletter_side_form").submit(function (e) {
+            e.preventDefault()
+            let serializedData = $(this).serialize()
+            $.ajax({
+                type: "POST",
+                url: "{% url 'newsletter-subscribe' %}",
+                data: serializedData,
+                success: function (response) {
+                    console.log("Success", response)
+                    $("#newsletter_side_message").html(`
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-3 rounded opacity-100 transition-opacity" role="alert">
+              ${response.message}
+           
+           <button type="button" class="float-right -mt-1 text-green-700 opacity-70 hover:opacity-100" onclick="this.parentElement.style.display='none'" aria-label="Close">&times;</button>
+           </div>
+          `)
+
+                },
+                error: function (response) {
+                    console.log("Failure", response)
+                    $("#newsletter_side_message").html(`
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-3 rounded opacity-100 transition-opacity" role="alert">
+              ${response.responseJSON.message}
+           
+           <button type="button" class="float-right -mt-1 text-red-700 opacity-70 hover:opacity-100" onclick="this.parentElement.style.display='none'" aria-label="Close">&times;</button>
+           </div>
+          `)
+                }
+            })
+        })
+    </script>
+
 
 </body>
+
 </html>

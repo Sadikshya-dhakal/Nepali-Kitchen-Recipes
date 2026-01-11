@@ -10,4 +10,5 @@ urlpatterns = [
     path("recipe/<int:pk>/", views.RecipeDetailView.as_view(), name="recipe-detail"),
     path('about/', views.AboutView.as_view(), name='about'),
     path('contact/', views.ContactCreateView.as_view(), name='contact'),
+    path('newsletter/subscribe/', views.NewsletterSubscriptionView.as_view(), name='newsletter-subscribe'),
 ]

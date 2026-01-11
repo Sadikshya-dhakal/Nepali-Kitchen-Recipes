@@ -182,3 +182,9 @@ class Contact(TimeStampModel):
     
     class Meta:
         ordering = ["-created_at"]
+
+class NewsletterSubscription(TimeStampModel):
+    email = models.EmailField(unique=True)
+    
+    def __str__(self):
+        return self.email

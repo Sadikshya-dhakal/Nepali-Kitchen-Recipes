@@ -1,11 +1,13 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, Q, Avg
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, TemplateView, ListView, DetailView
 
-from recipes.forms import ContactForm
+from recipes.forms import ContactForm, NewsletterSubscriptionForm
 from .models import Contact, Newsletter, Recipe, Category, AboutPage, CoreValue, OurTeam, Review
 
 
@@ -142,3 +144,37 @@ class ContactCreateView(SuccessMessageMixin, CreateView):
             "There was an error sending your message. Please check the form.",
         )
         return super().form_invalid(form)
+
+
+class NewsletterSubscriptionView(View):
+
+    def post(self, request):
+        is_ajax = request.headers.get("x-requested-with")
+        if is_ajax == "XMLHttpRequest":
+            form = NewsletterSubscriptionForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    {
+                    "success": True,
+                    "message": "Successfully subscribed to the newsletter.",
+                    },
+                    status=201
+               )
+            else:
+                return JsonResponse(
+                    {
+                      "success": False,
+                      "message": "Cannot suscribe to the newsletter.", 
+                    },
+                    status=400,
+                )
+        else:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Cannot process. Must be an AJAX XMLHttpRequest",
+                
+                },
+                status=400,
+            )
