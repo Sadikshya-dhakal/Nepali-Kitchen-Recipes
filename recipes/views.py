@@ -9,7 +9,7 @@ from django.views.generic import CreateView, TemplateView, ListView, DetailView
 
 from recipes.forms import ContactForm, NewsletterSubscriptionForm
 from .models import Contact, Newsletter, Recipe, Category, AboutPage, CoreValue, OurTeam, Review
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class HomeView(TemplateView):
     template_name = "recipes/home.html"
@@ -178,3 +178,38 @@ class NewsletterSubscriptionView(View):
                 },
                 status=400,
             )
+
+
+class RecipeSearchView(View):
+    template_name = "recipes/category/detail/all_recipes.html"
+    
+    def get(self, request):
+        print(request.GET)
+        query = request.GET.get("query", "")
+        
+    
+        recipe_list = Recipe.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        ).order_by("-created_at")
+        
+        page = request.GET.get("page", 1)
+        paginate_by = 12
+        paginator = Paginator(recipe_list, paginate_by)
+        
+        try:
+            recipes = paginator.page(page)
+        except PageNotAnInteger:
+            recipes = paginator.page(1)
+        
+        trending_recipes = Recipe.objects.all().order_by("-created_at")[:5]
+        
+        return render(
+            request,
+            self.template_name,
+            {
+                "page_obj": recipes,
+                "recipes": recipes,
+                "query": query,
+                "trending_recipes": trending_recipes,
+            },
+        )
