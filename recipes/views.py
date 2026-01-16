@@ -193,7 +193,7 @@ class RecipeSearchView(View):
         ).order_by("-created_at")
         
         page = request.GET.get("page", 1)
-        paginate_by = 12
+        paginate_by = 1
         paginator = Paginator(recipe_list, paginate_by)
         
         try:
