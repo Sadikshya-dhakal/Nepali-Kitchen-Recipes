@@ -1,4 +1,5 @@
 from django.db import models
+from tinymce.models import HTMLField
 
 
 class TimeStampModel(models.Model):
@@ -42,8 +43,8 @@ class Recipe(TimeStampModel):
     
     # Basic information
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True, help_text="Brief description")
-    content = models.TextField(blank=True, help_text="Detailed content")
+    description = models.TextField()
+    content = HTMLField()
     featured_image = models.ImageField(upload_to="recipes/%Y/%m/%d", blank=False)
     
     # Author and status
@@ -51,9 +52,9 @@ class Recipe(TimeStampModel):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="active")
     
     # Metrics
-    views_count = models.PositiveBigIntegerField(default=0)
-    likes_count = models.PositiveBigIntegerField(default=0)
-    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    views_count = models.PositiveIntegerField(default=0)
+    likes_count = models.PositiveIntegerField(default=0)
+    rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
     review_count = models.PositiveIntegerField(default=0)
     
     # Recipe details
@@ -63,8 +64,8 @@ class Recipe(TimeStampModel):
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default="medium")
     
     # Recipe content
-    ingredients = models.TextField(help_text="One ingredient per line")
-    instructions = models.TextField(help_text="One step per line")
+    ingredients = models.TextField()
+    instructions = models.TextField()
     chef_tips = models.TextField(blank=True, null=True, help_text="One tip per line")
     
 
