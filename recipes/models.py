@@ -43,7 +43,7 @@ class Recipe(TimeStampModel):
     
     # Basic information
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = HTMLField()
     content = HTMLField()
     featured_image = models.ImageField(upload_to="recipes/%Y/%m/%d", blank=False)
     
@@ -64,8 +64,8 @@ class Recipe(TimeStampModel):
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default="medium")
     
     # Recipe content
-    ingredients = models.TextField()
-    instructions = models.TextField()
+    ingredients = HTMLField()
+    instructions = HTMLField()
     chef_tips = models.TextField(blank=True, null=True, help_text="One tip per line")
     
 
