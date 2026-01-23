@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third party apps
      'tinymce',
+    'rest_framework',
     # local apps
     'recipes',
     'accounts',
@@ -141,3 +142,8 @@ MESSAGE_TAGS = {
 }
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
