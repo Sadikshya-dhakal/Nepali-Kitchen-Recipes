@@ -38,7 +38,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm">
-                        {{ recipe.description|truncatewords:15 }}
+                        {{ recipe.description|striptags|truncatewords:200 }}
                     </p>
                 </div>
 

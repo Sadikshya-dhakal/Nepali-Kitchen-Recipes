@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 
-from api.serializers import CategorySerializer, GroupSerializer, UserSerializer
-from recipes.models import Category
+from api.serializers import CategorySerializer, GroupSerializer, RecipeSerializer, UserSerializer
+from recipes.models import Category, Recipe
 
 # Create your views here.
 
@@ -40,3 +40,31 @@ class CategoryViewSet(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         
         return super().get_permissions()
+    
+class RecipeViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Recipes to be viewed or edited.
+    """
+    queryset = Recipe.objects.all().order_by("-published_at")
+    serializer_class = RecipeSerializer
+    permission_classes = [permissions.IsAdminUser]
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action in ["list", "retrieve"]:
+            queryset = queryset.filter(status="active", published_at__isnull=False)
+            
+            query = self.request.query_params.get("query", None)
+            if query:
+                queryset = queryset.filter(
+                    Q(title__icontains=query) | Q(content__icontains=query)
+                )
+        
+        return queryset
+    
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            return [permissions.AllowAny()]
+        return super().get_permissions()
+    
+
