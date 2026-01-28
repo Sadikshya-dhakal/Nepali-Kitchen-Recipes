@@ -189,3 +189,10 @@ class NewsletterSubscription(TimeStampModel):
     
     def __str__(self):
         return self.email
+    
+class Advertisement(TimeStampModel):
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="advertisements/%Y/%m/%d", blank=False)
+
+    def __str__(self):
+        return self.title

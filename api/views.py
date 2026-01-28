@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
-
-from api.serializers import CategorySerializer, GroupSerializer, RecipeSerializer, UserSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from api.serializers import CategorySerializer, GroupSerializer, RecipePublishSerializer, RecipeSerializer, UserSerializer
 from recipes.models import Category, Recipe
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.utils import timezone
 
 # Create your views here.
 
@@ -68,3 +72,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return super().get_permissions()
     
 
+class DraftListView(ListAPIView):
+    queryset = Recipe.objects.filter(published_at__isnull=True)
+    serializer_class = RecipeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class DraftDetailView(RetrieveAPIView):
+    queryset = Recipe.objects.filter(published_at__isnull=True)
+    serializer_class = RecipeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class RecipePublishViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request, *args, **kwargs):
+        serializer = RecipePublishSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            data = serializer.data
+            recipe = Recipe.objects.get(pk=data["id"])
+            recipe.published_at = timezone.now()
+            recipe.status = "active"
+            recipe.save()
+            serialized_data = RecipeSerializer(recipe).data
+            return Response(serialized_data, status=status.HTTP_200_OK)

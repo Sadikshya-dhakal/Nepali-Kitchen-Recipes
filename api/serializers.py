@@ -73,3 +73,6 @@ class RecipeSerializer(serializers.ModelSerializer):
     def validate(self, data):
         data["author"] = self.context["request"].user
         return data
+    
+class RecipePublishSerializer(serializers.Serializer):
+    id = serializers.IntegerField()

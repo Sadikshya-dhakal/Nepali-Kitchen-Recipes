@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Recipe, Newsletter, AboutPage, CoreValue, OurTeam, Contact, NewsletterSubscription
+from .models import Advertisement, Category, Recipe, Newsletter, AboutPage, CoreValue, OurTeam, Contact, NewsletterSubscription
 from django import forms
 from tinymce.widgets import TinyMCE
 
@@ -11,6 +11,7 @@ admin.site.register(AboutPage)
 admin.site.register(CoreValue)
 admin.site.register(OurTeam)
 admin.site.register(Contact)
+admin.site.register(Advertisement) 
 admin.site.register(NewsletterSubscription)
 
 class RecipeAdminForm(forms.ModelForm):

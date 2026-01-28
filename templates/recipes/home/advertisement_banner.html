@@ -1,10 +1,29 @@
-<!-- Advertisement Banner -->
-<section class="py-16">
-    <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl p-12 text-white text-center">
-        <h2 class="text-4xl font-bold mb-4">🎉 Special Offer! 🎉</h2>
-        <p class="text-xl mb-6">Get Premium Access - 50% OFF for New Members!</p>
-        <button class="bg-white text-purple-600 px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transition transform hover:scale-105">
-            Claim Offer Now
-        </button>
+{% for ad in advertisements %}
+<section class="py-12">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-10
+                bg-gradient-to-r from-blue-100 to-purple-100
+                rounded-3xl p-10">
+
+      <!-- Text Content -->
+      <div>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">
+          {{ ad.title }}
+        </h2>
+
+        <p class="text-gray-700 text-lg">
+          Homemade recipes rooted in culture, flavor, and everyday cooking.
+        </p>
+      </div>
+
+      <!-- Image -->
+      <div class="flex justify-center">
+        <img src="{{ ad.image.url }}"
+             alt="{{ ad.title }}"
+             class="w-full max-w-md rounded-2xl shadow-lg object-cover">
+      </div>
+
     </div>
+  </div>
 </section>
+{% endfor %}

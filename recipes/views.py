@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic import CreateView, TemplateView, ListView, DetailView
 
 from recipes.forms import ContactForm, NewsletterSubscriptionForm
-from .models import Contact, Newsletter, Recipe, Category, AboutPage, CoreValue, OurTeam, Review
+from .models import Advertisement, Contact, Newsletter, Recipe, Category, AboutPage, CoreValue, OurTeam, Review
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class HomeView(TemplateView):
@@ -26,6 +26,8 @@ class HomeView(TemplateView):
             status="active", 
             is_trending=True
         ).order_by("-published_at")[:6]
+
+        context["advertisements"] = Advertisement.objects.all()
         
         return context
 

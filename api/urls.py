@@ -9,9 +9,13 @@ router.register(r"groups", views.GroupViewSet)
 router.register(r"categories", views.CategoryViewSet)
 router.register(r"recipes", views.RecipeViewSet)
 
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path("", include(router.urls)),
+    path("drafts-list/", views.DraftListView.as_view(), name="draft-list-api"),
+    path("drafts-detail/<int:pk>/", views.DraftDetailView.as_view(), name="draft-detail-api"),
+    path("publish-recipe/", views.RecipePublishViewSet.as_view(), name="publish-recipe-api"),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
