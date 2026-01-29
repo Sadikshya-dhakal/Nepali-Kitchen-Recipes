@@ -71,7 +71,7 @@ class Recipe(TimeStampModel):
 
     
     # Flags
-    is_trending = models.BooleanField(default=False)
+    is_trending = models.BooleanField(default=False) #for true or false
     is_featured = models.BooleanField(default=False)
     
     # Publishing
@@ -86,14 +86,14 @@ class Recipe(TimeStampModel):
     class Meta:
         ordering = ["-published_at"]
     
-    @property
+    @property # Function can be accessed like an attribute,variable not called like a function
     def total_time(self):
         return self.prep_time + self.cook_time
     
     @property
     def ingredients_list(self):
         if self.ingredients:
-            return [i.strip() for i in self.ingredients.split('\n') if i.strip()]
+            return [i.strip() for i in self.ingredients.split('\n') if i.strip()] # return list of non-empty ingredients
         return []
     
     @property
