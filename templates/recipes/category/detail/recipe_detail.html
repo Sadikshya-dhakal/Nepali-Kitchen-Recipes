@@ -124,11 +124,13 @@
                     <div class="flex items-center justify-between">
                         <span class="font-semibold text-gray-700">Servings:</span>
                         <div class="flex items-center gap-3">
-                            <button class="w-8 h-8 bg-white rounded-full shadow hover:bg-gray-100 transition">
+                            <button class="w-8 h-8 bg-white rounded-full shadow hover:bg-gray-100 transition"
+                                onclick="adjustServings(-1)">
                                 <i class="fas fa-minus text-sm"></i>
                             </button>
-                            <span class="font-bold text-lg">{{ recipe.servings }}</span>
-                            <button class="w-8 h-8 bg-white rounded-full shadow hover:bg-gray-100 transition">
+                            <span class="font-bold text-lg" id="servingCount">{{ recipe.servings }}</span>
+                            <button class="w-8 h-8 bg-white rounded-full shadow hover:bg-gray-100 transition"
+                                onclick="adjustServings(1)">
                                 <i class="fas fa-plus text-sm"></i>
                             </button>
                         </div>
@@ -222,5 +224,20 @@
 </section>
 {% endif %}
 
+<!-- JavaScript for Servings Adjustment -->
+<script>
+// Adjust Servings Function
+var baseServings = parseInt('{{ recipe.servings }}');
+function adjustServings(change) {
+    var servingElement = document.getElementById('servingCount');
+    var currentServings = parseInt(servingElement.textContent);
+    var newServings = currentServings + change;
+    
+    if (newServings >= 1) {
+        servingElement.textContent = newServings;
+        // Here you can add logic to update ingredient quantities proportionally
+    }
+}
+</script>
 
 {% endblock content %}
